@@ -1,15 +1,11 @@
-const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb"); // Import MongoClient, ServerApiVersion, and ObjectId
 const express = require("express");
 var cors = require("cors");
+const messagesApi = require("./api/messagesApi.js");
+
 const app = express();
 const port = 3003;
-
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(cors());
-
-const uri = "mongodb://localhost:27017"; // default mongodb 27017 port number
-// Create a MongoClient with a MongoClientOptions object to set the Stable API version
+const uri = "mongodb://localhost:27017";
 const client = new MongoClient(uri, {
   serverApi: {
     version: ServerApiVersion.v1,
@@ -18,26 +14,11 @@ const client = new MongoClient(uri, {
   },
 });
 
-// app.get("/", (req, res) => {
-//   res.send("Hello World! This is so much better now!");
-// });
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cors());
 
-// app.get("/:id", (req, res) => {
-//   console.log("params", req.params);
-
-//   res.send("Hello World! This is so much better now!");
-// });
-
-// app.get("/messages/:id", (req, res) => {
-//   console.log("params", req.params);
-
-//   res.send("Hello World! This is so much better now!");
-// });
-
-// app.post("/travel-destinations", (req, res) => {
-//   console.log("body:", req.body);
-//   res.send("Hello World! This is so much better now!");
-// });
+app.use("/messages", messagesApi);
 
 app.post("/destinations", async (req, res) => {
   createDestination(req.body);
